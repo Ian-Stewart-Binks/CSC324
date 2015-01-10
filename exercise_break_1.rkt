@@ -40,3 +40,9 @@
 ; Exercise 9: Write a function taking a list with no duplicates, and a number k, and returns all subsets of size k
 ;             of that list.
 (define (subsets-size-k set k) (filter (lambda (x) (= (length x) k)) (subsets set)))
+
+; Exercise 10: Modify your function to the previous question so that the parameter k is optional
+;              and if not specified, the function returns all subsets.
+(define (subsets-size-k-optional set [k -1]) (if (= k -1) 
+                                                (subsets set)
+                                                (subsets-size-k set k)))
