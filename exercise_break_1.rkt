@@ -17,3 +17,12 @@
 
 ; Exercise 5 b: Then, output the items that appear in at least one of the two lists.
 (define (union lst1 lst2) (remove-duplicates (append lst1 lst2)))
+
+; Exercise 6: Write a function which takes a list of lists, and returns the list which contains the largest item.
+(define (get-largest-sublist lsts) (filter (lambda (x) (if (empty? x) #f
+                                                           (= (first (max-list x)) (first (max-list (get-all-max-vals lsts))))))
+                                           lsts))
+
+(define (get-all-max-vals lsts) (map (lambda (y) (first (max-list y))) (filter (lambda (x) (not (empty? x))) lsts)))
+
+(define (max-list lst) (filter (lambda (x) (empty? (filter (lambda (y) (> y x)) lst))) lst))
