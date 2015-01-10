@@ -19,10 +19,16 @@
 (define (union lst1 lst2) (remove-duplicates (append lst1 lst2)))
 
 ; Exercise 6: Write a function which takes a list of lists, and returns the list which contains the largest item.
+; Perhaps this function could be improved with folding.
 (define (get-largest-sublist lsts) (filter (lambda (x) (if (empty? x) #f
                                                            (= (first (max-list x)) (first (max-list (get-all-max-vals lsts))))))
                                            lsts))
 
+; Get all max values of every sublist.
 (define (get-all-max-vals lsts) (map (lambda (y) (first (max-list y))) (filter (lambda (x) (not (empty? x))) lsts)))
 
+; Get the largest element of a list.
 (define (max-list lst) (filter (lambda (x) (empty? (filter (lambda (y) (> y x)) lst))) lst))
+
+; Exercise 7: Write a function which takes an item and a list of lists and inserts the function in the front of every list
+(define (insert-at-front item lsts) (map (lambda (x) (cons item x)) lsts))
