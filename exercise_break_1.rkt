@@ -32,3 +32,7 @@
 
 ; Exercise 7: Write a function which takes an item and a list of lists and inserts the function in the front of every list
 (define (insert-at-front item lsts) (map (lambda (x) (cons item x)) lsts))
+
+; Exercise 8: Write a function which takes a list with no duplicates representing a set (order doesn't matter).
+; Returns a list of lists containing all of the subsets of that list.
+(define (subsets set) (cons '() (foldl (lambda (x y) (append (insert-at-front x (cons '() y)) y)) '() set)))
