@@ -6,4 +6,7 @@
 (define (appears lst item) (> (length (filter (lambda (x) (equal? x item)) lst)) 0))
 
 ; Exercise 3: Write a function to determine the number of duplicates in a list.
-(define (num_duplicates lst) (length (filter (lambda (x) (member x lst)) lst)))
+(define (num_duplicates lst) (length (filter (lambda (x) (member x (remove x lst))) lst)))
+
+; Exercise 4: Write a function to remove all duplicates from a list.
+(define (remove_duplicates lst) (filter (lambda (x) (not (member x (remove x lst)))) lst))
