@@ -36,3 +36,7 @@
 ; Exercise 8: Write a function which takes a list with no duplicates representing a set (order doesn't matter).
 ; Returns a list of lists containing all of the subsets of that list.
 (define (subsets set) (cons '() (foldl (lambda (x y) (append (insert-at-front x (cons '() y)) y)) '() set)))
+
+; Exercise 9: Write a function taking a list with no duplicates, and a number k, and returns all subsets of size k
+;             of that list.
+(define (subsets-size-k set k) (filter (lambda (x) (= (length x) k)) (subsets set)))
