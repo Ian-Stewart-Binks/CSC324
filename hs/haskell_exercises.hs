@@ -61,3 +61,12 @@ removeThird [] = ((), [])
 removeThird s = let (first, s1) = pop s
                     (_, s2) = removeSecond s1
                  in push first s2
+
+-- 2. Implement the function removeNth :: Integer -> StackOp (), which
+--    takes a positive integer n and returns a StackOp that removes the nthhighest
+--    from the stack.
+removeNth :: Integer -> StackOp ()
+removeNth _ [] = ((), [])
+removeNth 1 (x:xs) = ((), xs)
+removeNth n (x:xs) = let (_, s1) = removeNth (n - 1) xs
+                     in ((), x:s1)
