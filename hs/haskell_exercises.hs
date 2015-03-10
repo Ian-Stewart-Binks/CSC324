@@ -50,10 +50,14 @@ push item stack = ((), item : stack)
 --    third-highest item from the stack, respectively. (Here “highest” refers
 --    to an item’s position on the stack, and not the item’s value.)
 removeSecond :: StackOp ()
+removeSecond [] = ((), [])
 removeSecond s = let (first, s1) = pop s
                      (second, s2) = pop s1
                  in push first s2
 
 
---removeThird :: StackOp()
-
+removeThird :: StackOp()
+removeThird [] = ((), [])
+removeThird s = let (first, s1) = pop s
+                    (_, s2) = removeSecond s1
+                 in push first s2
