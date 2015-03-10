@@ -70,3 +70,12 @@ removeNth _ [] = ((), [])
 removeNth 1 (x:xs) = ((), xs)
 removeNth n (x:xs) = let (_, s1) = removeNth (n - 1) xs
                      in ((), x:s1)
+
+-- 3. One of the drawbacks of pop is that it raises a runtime error on So in case you’ve been lulled into a
+--    false sense of security by static typing,
+--    runtime errors occur in Haskell too!
+--    an empty stack. Implement safePop :: StackOp (Maybe Integer),
+--    which behaves similarly to pop, except it does not have this problem
+safePop :: StackOp (Maybe Integer)
+safePop [] = (Nothing, [])
+safePop (x:xs) = (Just x, xs)
