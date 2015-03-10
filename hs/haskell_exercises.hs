@@ -34,3 +34,26 @@ union_ lst1 lst2 = removeDup $ lst1 ++ lst2
 -- return ’(45 10)).
 largestSubItem :: Ord a => [[a]] -> [a]
 largestSubItem lst = foldl (\x y -> if null x then y else if null y then x else if maximum x > maximum y then x else y) [] lst
+
+type Stack = [Integer]
+type StackOp a = Stack -> (a, Stack)
+
+pop :: StackOp Integer
+pop (top:rest) = (top, rest)
+
+push :: Integer -> StackOp ()
+push item stack = ((), item : stack)
+
+-- Page 82 Exercises
+-- 1. Implement the functions removeSecond :: StackOp () and
+--    removeThird :: StackOp (), which remove the second-highest and
+--    third-highest item from the stack, respectively. (Here “highest” refers
+--    to an item’s position on the stack, and not the item’s value.)
+removeSecond :: StackOp ()
+removeSecond s = let (first, s1) = pop s
+                     (second, s2) = pop s1
+                 in push first s2
+
+
+--removeThird :: StackOp()
+
