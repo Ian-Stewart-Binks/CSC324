@@ -79,3 +79,17 @@ removeNth n (x:xs) = let (_, s1) = removeNth (n - 1) xs
 safePop :: StackOp (Maybe Integer)
 safePop [] = (Nothing, [])
 safePop (x:xs) = (Just x, xs)
+
+-- 4. Implement returnVal :: a -> StackOp a, which takes a value and
+--    returns a new StackOp with no mutating effect, and which simply
+--    returns the value as the “result.”
+-- > returnVal 5 [4,2,6,10]
+-- (5, [4,2,6,10])
+-- > returnVal [True,False] [4,2,6,10]
+-- ([True,False], [4,2,6,10])
+returnVal :: a -> StackOp a
+returnVal n s = (n, s)
+
+-- 5. Using returnVal, sumOfStack so that it does not “mutate” the stack.
+-- 6. Using returnVal, re-implement removeSecond, removeThird, and removeNth
+--    so that they also return the removed item.
