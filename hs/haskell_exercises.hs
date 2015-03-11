@@ -1,26 +1,27 @@
--- Reimplement all of the list functions from the first set of exercises in
--- the Racket chapter, this time in Haskell, with or without using explicit
--- recursion.
+-- Page 55.
+-- 1. Reimplement all of the list functions from the first set of exercises in
+--    the Racket chapter, this time in Haskell, with or without using explicit
+--    recursion.
 
--- 1. Write a function to determine the length of the list
+-- 1.1. Write a function to determine the length of the list
 len :: [a] -> Int
 len = foldl (\x y -> x + 1) 0
 
--- 2. Write a function to determine if a given item appears in a list.
+-- 1.2. Write a function to determine if a given item appears in a list.
 elem2 :: Eq a => a -> [a] -> Bool
 elem2 item = foldl (\x y -> y == item || x) False
 
--- 3. Write a function to determine the number of duplicates in a list.
+-- 1.3. Write a function to determine the number of duplicates in a list.
 dup :: Eq a => [a] -> Int
 dup [] = 0
 dup lst = (dup $ tail lst) + (if elem (head lst) (tail lst) then 1 else 0)
 
--- 4. Write a function to remove all duplicates from a list.
+-- 1.4. Write a function to remove all duplicates from a list.
 removeDup :: Eq a => [a] -> [a]
 removeDup [] = []
 removeDup lst = (if elem (head lst) (tail lst) then [] else [(head lst)]) ++ (removeDup $ tail lst)
 
--- 5. Given two lists, output the items that appear in both lists (intersection).
+-- 1.5. Given two lists, output the items that appear in both lists (intersection).
 --    Then, output the items that appear in at least one of the two
 --    lists (union).
 intersection :: Eq a => [a] -> [a] -> [a]
@@ -29,7 +30,7 @@ intersection lst1 lst2 = filter (`elem` lst2) lst1
 union_ :: Eq a => [a] -> [a] -> [a]
 union_ lst1 lst2 = removeDup $ lst1 ++ lst2
 
--- 6. Write a function which takes a list of lists, and returns the list which
+-- 1.6. Write a function which takes a list of lists, and returns the list which
 -- contains the largest item (e.g., given ’((1 2 3) (45 10) () (15)),
 -- return ’(45 10)).
 largestSubItem :: Ord a => [[a]] -> [a]
@@ -43,6 +44,18 @@ pop (top:rest) = (top, rest)
 
 push :: Integer -> StackOp ()
 push item stack = ((), item : stack)
+
+-- 2. Make sure you understand the meaning of seq, and how to use it correctly.
+-- Seq takes in two arguments. It sort of evaluates the first one, and then
+-- returns the second one.
+
+-- 3. Define an infinite list containing all negative numbers. Then, de-
+--    fine an infinite list ints containing all integers such that elem x ints
+--    halts whenever x is an integer.
+negNums :: [Integer]
+negNums = -1 : (map (\x -> x - 1) negNums)
+
+-- 4.
 
 -- Page 82 Exercises
 -- 1. Implement the functions removeSecond :: StackOp () and
@@ -91,5 +104,19 @@ returnVal :: a -> StackOp a
 returnVal n s = (n, s)
 
 -- 5. Using returnVal, sumOfStack so that it does not “mutate” the stack.
+
+(~>) :: StackOp a -> (a -> b) -> StackOp b
+(f ~> g) s = let (x, s1) = f s
+             in (g x, s1)
+
+(>~>) :: StackOp a -> (a -> StackOp b) -> StackOp b
+(f >~> g) s = let (x, s1) = f s
+                  newStackOp = g x
+              in newStackOp s1
+
+sumOfStack :: StackOp Integer
+sumOfStack [] = (returnVal 0 [])
+sumOfStack s = (pop >~> \x -> sumOfStack ~> (+x)) s
+
 -- 6. Using returnVal, re-implement removeSecond, removeThird, and removeNth
 --    so that they also return the removed item.
