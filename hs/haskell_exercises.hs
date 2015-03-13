@@ -113,10 +113,14 @@ returnVal n s = (n, s)
 (f >~> g) s = let (x, s1) = f s
                   newStackOp = g x
               in newStackOp s1
+(>>>) :: StackOp a -> StackOp b -> StackOp b
+(op1 >>> op2) s =
+    let (_, s1) = op1 s
+    in op2 s1
 
 sumOfStack :: StackOp Integer
 sumOfStack [] = (returnVal 0 [])
-sumOfStack s = (pop >~> \x -> sumOfStack ~> (+x)) s
+sumOfStack s = (pop >~> \x -> sumOfStack ~> (+x) >~> \y -> push x >>> returnVal y) s
 
 -- 6. Using returnVal, re-implement removeSecond, removeThird, and removeNth
 --    so that they also return the removed item.
