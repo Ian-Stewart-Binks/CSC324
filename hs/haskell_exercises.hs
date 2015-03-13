@@ -134,7 +134,7 @@ removeThirdPrime :: StackOp Integer
 removeThirdPrime = pop >~>
                    \x -> pop >~>
                    \y -> pop >~>
-                   \z -> push y >>>
+                   \z -> push y >>
                    push x >>>
                    returnVal z
 
@@ -144,5 +144,12 @@ removeNthP _ [] = (0, [])
 removeNthP 1 (x:xs) = (x, xs)
 removeNthP n s = (pop >~> \x ->
                   removeNthP (n - 1) >~>
-                  \y -> push x >>>
+                  \y -> push x >>
                   returnVal y) s
+
+-- 7. Implement len :: StackOp Integer, which computes the number
+--    of elements on the stack. Do not “mutate” the stack.
+leng :: StackOp Integer
+leng [] = (0, [])
+leng s  = (pop >~> \x ->
+           leng ~> (+1) >~> \y -> push x >> returnVal y) s
