@@ -69,7 +69,7 @@ removeSecond s = let (first, s1) = pop s
                  in push first s2
 
 
-removeThird :: StackOp()
+removeThird :: StackOp ()
 removeThird [] = ((), [])
 removeThird s = let (first, s1) = pop s
                     (_, s2) = removeSecond s1
@@ -124,3 +124,25 @@ sumOfStack s = (pop >~> \x -> sumOfStack ~> (+x) >~> \y -> push x >>> returnVal 
 
 -- 6. Using returnVal, re-implement removeSecond, removeThird, and removeNth
 --    so that they also return the removed item.
+removeSecondPrime :: StackOp Integer
+removeSecondPrime = pop >~>
+                    \y -> pop >~>
+                    \x -> push y >>>
+                    returnVal x
+
+removeThirdPrime :: StackOp Integer
+removeThirdPrime = pop >~>
+                   \x -> pop >~>
+                   \y -> pop >~>
+                   \z -> push y >>>
+                   push x >>>
+                   returnVal z
+
+
+removeNthP :: Integer -> StackOp Integer
+removeNthP _ [] = (0, [])
+removeNthP 1 (x:xs) = (x, xs)
+removeNthP n s = (pop >~> \x ->
+                  removeNthP (n - 1) >~>
+                  \y -> push x >>>
+                  returnVal y) s
