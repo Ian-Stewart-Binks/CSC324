@@ -153,3 +153,12 @@ leng :: StackOp Integer
 leng [] = (0, [])
 leng s  = (pop >~> \x ->
            leng ~> (+1) >~> \y -> push x >> returnVal y) s
+
+
+-- 8. Implement stackMap :: (Integer -> Integer) -> StackOp (),
+--    which takes a function f and mutates the stack by applying f to every
+--    item.
+
+stackMap :: (Integer -> Integer) -> StackOp ()
+stackMap _ [] = ((), [])
+stackMap f s = (pop >~> \x -> (stackMap f) >> push (f x)) s
