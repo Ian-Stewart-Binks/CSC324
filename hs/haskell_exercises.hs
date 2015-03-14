@@ -162,3 +162,11 @@ leng s  = (pop >~> \x ->
 stackMap :: (Integer -> Integer) -> StackOp ()
 stackMap _ [] = ((), [])
 stackMap f s = (pop >~> \x -> (stackMap f) >> push (f x)) s
+
+-- 9. Implement stackFilter :: (Integer -> Bool) -> StackOp (),
+--    which creates a StackOp that removes all elements in the stack that
+--    don’t satisfy the input predicate.
+stackFilter :: (Integer -> Bool) -> StackOp ()
+stackFilter _ [] = ((), [])
+stackFilter f s = (pop >~> \x -> stackFilter f >>>
+                   if f x then push x else returnVal ()) s
