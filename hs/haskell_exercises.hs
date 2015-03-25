@@ -105,18 +105,19 @@ returnVal n s = (n, s)
 
 -- 5. Using returnVal, sumOfStack so that it does not “mutate” the stack.
 
-(~>) :: StackOp a -> (a -> b) -> StackOp b
-(f ~> g) s = let (x, s1) = f s
-             in (g x, s1)
 
 (>~>) :: StackOp a -> (a -> StackOp b) -> StackOp b
 (f >~> g) s = let (x, s1) = f s
                   newStackOp = g x
               in newStackOp s1
+
 (>>>) :: StackOp a -> StackOp b -> StackOp b
-(op1 >>> op2) s =
-    let (_, s1) = op1 s
-    in op2 s1
+(f >>> g) s = (f >~> \x -> g) s
+
+(~>) :: StackOp a -> (a -> b) -> StackOp b
+(f ~> g) s = (f >~> \x y -> (g x, y)) s
+
+
 
 sumOfStack :: StackOp Integer
 sumOfStack [] = (returnVal 0 [])
@@ -170,3 +171,8 @@ stackFilter :: (Integer -> Bool) -> StackOp ()
 stackFilter _ [] = ((), [])
 stackFilter f s = (pop >~> \x -> stackFilter f >>>
                    if f x then push x else returnVal ()) s
+
+stackFoldl :: (a -> Integer -> a) -> a -> StackOp a
+stackFoldl f a [] = (a, [])
+stackFoldl f ac s = (pop >~> \x -> (stackFoldl f (f ac x)) >~> \y -> push x >>> returnVal y) s
+
